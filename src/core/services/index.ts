@@ -13,12 +13,12 @@ export const baseAPI = axios.create({
 export async function createShortUrl(
   url: UrlServicesModel.CreateShortUrl.Request
 ): Promise<UrlServicesModel.CreateShortUrl.Response> {
-  const response = await baseAPI.post("/", { url });
+  const response = await baseAPI.post("/create", { longUrl:url }, {withCredentials:true});
   return response.data;
 }
 export async function getUrlInformation(
   shortUrl: UrlServicesModel.GetUrlInformations.Request
 ): Promise<UrlServicesModel.GetUrlInformations.Response> {
-  const response = await baseAPI.get("/", { params: { shortUrl } });
+  const response = await baseAPI.get("/about", { params: {url: shortUrl } });
   return response.data;
 }

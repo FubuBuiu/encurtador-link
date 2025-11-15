@@ -1,7 +1,8 @@
 export namespace UrlServicesModel {
   export namespace CreateShortUrl {
     export type Request = string;
-    export interface Response {}
+    export interface Response {urlShortner:string}
+
   }
   export namespace GetUrlInformations {
     export type Request = string;

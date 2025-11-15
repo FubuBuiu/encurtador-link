@@ -2,21 +2,27 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { schema } from "./zodValidation";
-import { useEffect } from "react";
+import { createShortUrl } from "../../core/services";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const navigate = useNavigate();
+  const [shortUrl,setShortUrl] = useState<string|undefined>(undefined)
   const {
     register,
+    setValue,
     handleSubmit,
     formState: { errors },
-  } = useForm({ resolver: zodResolver(schema), reValidateMode: "onSubmit" });
+  } = useForm({ resolver: shortUrl? undefined: zodResolver(schema), reValidateMode: "onSubmit" });
 
-  const onSubmit = handleSubmit((data) => console.log(data));
-
+  const copyUrl = async (text:string)=> await navigator.clipboard.writeText(text)
+  const onSubmit = handleSubmit(async (data) => shortUrl !== undefined ? await copyUrl(data.url): await createShortUrl(data.url).then(response => setShortUrl(response.urlShortner)));
   const goToLinkInformation = () => navigate("/information");
-
-  useEffect(() => {});
+  useEffect(()=>{
+    if(shortUrl!== undefined){
+      setValue("url",shortUrl)
+    }
+  },[shortUrl])
   return (
     <div className="min-h-screen flex items-center justify-center bg-[linear-gradient(135deg,#f7f8fc,#e9ebf3)] px-4 font-sans">
       <div className="bg-white rounded-2xl shadow-lg max-w-5xl w-full p-12 md:flex md:items-center md:justify-between transition-shadow">
@@ -38,7 +44,7 @@ export default function Home() {
               className="flex-1 bg-transparent outline-none px-3 py-2 text-gray-800"
             />
             <button className="ml-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-4 py-2 font-medium">
-              Encurtar
+              {shortUrl!==undefined? "Copiar": "Encurtar"}
             </button>
           </form>
           {errors.url && (
