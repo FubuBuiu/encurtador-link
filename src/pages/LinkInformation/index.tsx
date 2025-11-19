@@ -25,7 +25,7 @@ export default function LinkInformation() {
   const onSubmit = handleSubmit((data) => console.log(data));
   const openModalTest = () => setIsOpenModal(true);
   const onCloseModal = () => setIsOpenModal(false);
-
+  console.log();
   const goToHome = () => navigate("/");
   return (
     <div className="min-h-screen flex items-center justify-center bg-[linear-gradient(135deg,#f7f8fc,#e9ebf3)] px-4 font-sans">
