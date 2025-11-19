@@ -2,9 +2,14 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import zod from "zod";
+import { useState } from "react";
+import DashboardModal from "./DashboardModal";
 
 export default function LinkInformation() {
   const navigate = useNavigate();
+
+  const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
+
   const schema = zod.object({
     urlShort: zod
       .string()
@@ -18,6 +23,8 @@ export default function LinkInformation() {
   } = useForm({ resolver: zodResolver(schema), reValidateMode: "onSubmit" });
 
   const onSubmit = handleSubmit((data) => console.log(data));
+  const openModalTest = () => setIsOpenModal(true);
+  const onCloseModal = () => setIsOpenModal(false);
 
   const goToHome = () => navigate("/");
   return (
@@ -40,7 +47,10 @@ export default function LinkInformation() {
               placeholder="Insira uma URL curta"
               className="flex-1 bg-transparent outline-none px-3 py-2 text-gray-800"
             />
-            <button className="ml-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-4 py-2 font-medium">
+            <button
+              className="ml-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-4 py-2 font-medium"
+              onClick={openModalTest}
+            >
               Consultar
             </button>
           </form>
@@ -49,16 +59,6 @@ export default function LinkInformation() {
               {errors.urlShort.message}
             </span>
           )}
-
-          {/* {short && (
-            <div className="mt-4">
-              <p className="text-sm text-gray-700">Link encurtado:</p>
-              <a href={short} className="text-blue-600 font-medium">
-                {short}
-              </a>
-            </div>
-          )} */}
-
           <div className="flex justify-start mt-3">
             <span
               className="text-blue-600 font-medium cursor-default"
@@ -68,15 +68,22 @@ export default function LinkInformation() {
             </span>
           </div>
         </div>
-
         <div className="md:flex-1 mt-8 md:mt-0 md:pl-6 text-right">
           <img
             src="/src/assets/link-information-image.svg"
             alt="Ilustração de encurtador de URL"
-            className="w-full max-w-md rounded-xl transform scale-105"
+            className="w-full max-w-md rounded-xl"
           />
         </div>
       </div>
+      <div className="animate-spin fill-red-500 size-3.5"></div>
+      {isOpenModal && (
+        <DashboardModal
+          isOpen={isOpenModal}
+          onClose={onCloseModal}
+          dashboardInfo={{} as any}
+        />
+      )}
     </div>
   );
 }

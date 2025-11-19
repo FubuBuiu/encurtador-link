@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { schema } from "./zodValidation";
+import { useEffect } from "react";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ export default function Home() {
 
   const goToLinkInformation = () => navigate("/information");
 
+  useEffect(() => {});
   return (
     <div className="min-h-screen flex items-center justify-center bg-[linear-gradient(135deg,#f7f8fc,#e9ebf3)] px-4 font-sans">
       <div className="bg-white rounded-2xl shadow-lg max-w-5xl w-full p-12 md:flex md:items-center md:justify-between transition-shadow">
