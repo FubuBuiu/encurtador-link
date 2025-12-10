@@ -67,7 +67,7 @@ export default function DashboardModal({
                   Tempo médio para acessar o link após a criação
                 </div>
                 <div className="stat-value">
-                  {dashboardInfo.avgTimeToAccessSeconds}
+                  {`${dashboardInfo.avgTimeToAccessSeconds} segundos`}
                 </div>
                 <div className="stat-figure">
                   <LuMousePointerClick className="scale-200" />

@@ -19,6 +19,7 @@ export async function createShortUrl(
 export async function getUrlInformation(
   shortUrl: UrlServicesModel.GetUrlInformations.Request
 ): Promise<UrlServicesModel.GetUrlInformations.Response> {
-  const response = await baseAPI.get("/about", { params: {url: shortUrl } });
-  return response.data;
+  const url = new URL(shortUrl).pathname.replace('/', "").trim();
+const response = await baseAPI.get(`/about/${url}`);
+return response.data;
 }

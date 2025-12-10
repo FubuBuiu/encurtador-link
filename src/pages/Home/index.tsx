@@ -60,7 +60,7 @@ export default function Home() {
             </div>
           )} */}
 
-          <div className="flex justify-start mt-3">
+          <div className="flex justify-end mt-3">
             <span
               className="text-blue-600 font-medium cursor-default"
               onClick={goToLinkInformation}

@@ -4,11 +4,14 @@ import { useNavigate } from "react-router-dom";
 import zod from "zod";
 import { useState } from "react";
 import DashboardModal from "./DashboardModal";
+import { getUrlInformation } from "../../core/services";
+import type { UrlServicesModel } from "../../core/services/models/UrlServicesModel";
 
 export default function LinkInformation() {
   const navigate = useNavigate();
 
   const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
+  const [dashboardInfo, setDashboardInfo] = useState<UrlServicesModel.GetUrlInformations.Response|undefined>(undefined)
 
   const schema = zod.object({
     urlShort: zod
@@ -22,10 +25,13 @@ export default function LinkInformation() {
     formState: { errors },
   } = useForm({ resolver: zodResolver(schema), reValidateMode: "onSubmit" });
 
-  const onSubmit = handleSubmit((data) => console.log(data));
-  const openModalTest = () => setIsOpenModal(true);
+  const onSubmit = handleSubmit(async (data) => await getUrlInformation(data.urlShort).then(response=>{
+    console.log(response)
+    setDashboardInfo(response)
+    setIsOpenModal(true)
+  }).catch(error=>console.log('ERRO----',error)));
+  //const openModalTest = () => setIsOpenModal(true);
   const onCloseModal = () => setIsOpenModal(false);
-  console.log();
   const goToHome = () => navigate("/");
   return (
     <div className="min-h-screen flex items-center justify-center bg-[linear-gradient(135deg,#f7f8fc,#e9ebf3)] px-4 font-sans">
@@ -49,7 +55,6 @@ export default function LinkInformation() {
             />
             <button
               className="ml-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-4 py-2 font-medium"
-              onClick={openModalTest}
             >
               Consultar
             </button>
@@ -77,11 +82,11 @@ export default function LinkInformation() {
         </div>
       </div>
       <div className="animate-spin fill-red-500 size-3.5"></div>
-      {isOpenModal && (
+      {isOpenModal && dashboardInfo && (
         <DashboardModal
           isOpen={isOpenModal}
           onClose={onCloseModal}
-          dashboardInfo={{} as any}
+          dashboardInfo={dashboardInfo}
         />
       )}
     </div>
